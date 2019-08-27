@@ -1,0 +1,40 @@
+import produce from 'immer'
+
+const INITIAL_STATE = {
+  loading: false,
+  token: null,
+  signed: false,
+  provider: false
+}
+
+export default function auth(state = INITIAL_STATE, action) {
+  return produce(state, draft => {
+    switch(action.type){
+      case '@auth/SIGN_IN_REQUEST': {
+        draft.loading = true;
+        break;
+      }
+      case '@auth/SIGN_IN_SUCCESS': {
+        draft.loading = false;
+        draft.token = action.payload.token;
+        draft.signed = true;
+        draft.provider = action.payload.user.provider
+        break;
+      }
+      case '@auth/SIGN_FAILURE': {
+        draft.loading = false;
+        break;
+      }
+      case '@auth/SIGN_UP_REQUEST':{
+        draft.loading = true;
+        break;
+      }
+      case '@auth/SIGN_UP_SUCCESS': {
+        draft.loading = false;
+        break;
+      }
+      default:
+        return state
+    }
+  })
+}
